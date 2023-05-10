@@ -2,6 +2,8 @@
 #include "Student.cpp"
 using namespace std;
 
+map<string, int> departmentCount;
+
 class BST
 {
 private:
@@ -22,34 +24,32 @@ private:
 public:
     BST(Student student) : student(student), left(nullptr), right(nullptr) {}
     void addStudent(Student student);
-    BST(const vector<Student> &students) : left(nullptr), right(nullptr)
-    {
-        for (const Student &s : students)
-        {
-            addStudent(s);
-        }
-    }
     void searchStudent(int ID);
     void deleteStudent(int ID);
     void printAll();
-    // Not Completed
     void printDepartmentReport();
 };
-// void BST::printDepartmentReport()
-// {
-//     map<string, int> departmentCount;
-//     BST *tmp = this;
-//     while (tmp)
-//     {
-//         departmentCount[tmp->student.department]++;
-//         tmp = tmp->deleteNode(tmp->student.ID, tmp);
-//     }
-//     cout << "\nDepartment Report:\n";
-//     for (const auto &count : departmentCount)
-//     {
-//         cout << count.first << ": " << count.second << " students\n";
-//     }
-// }
+
+void BST::printDepartmentReport()
+{
+    departmentCount[this->student.department]++;
+    if (left)
+    {
+        left->printDepartmentReport();
+    }
+    else if (right)
+    {
+        right->printDepartmentReport();
+    }
+    else
+    {
+        cout << "\nDepartment Report:\n";
+        for (const auto &count : departmentCount)
+        {
+            cout << count.first << ": " << count.second << " students\n";
+        }
+    }
+}
 void BST::printAll()
 {
     if (left)
@@ -186,45 +186,55 @@ void BST::deleteStudent(int ID)
 int main()
 {
     ifstream myFile;
-    myFile.open("Test.txt", ios::out);
-
+    myFile.open("Test.txt", ios::in);
+    int ID;
+    string name, department;
+    double GPA;
     string line = "";
     int numOfStudents = 0;
 
     // Read Number of Students
     getline(myFile, line);
     numOfStudents = stoi(line);
-    vector<Student> students;
-    for (int i = 0; i < numOfStudents; i++)
+
+    // Read first student
+    getline(myFile, line); // Read ID
+    ID = stoi(line);
+
+    getline(myFile, line); // Read Name
+    name = line;
+
+    getline(myFile, line); // Read GPA
+    GPA = stod(line);
+
+    getline(myFile, line); // Read Department
+    department = line;
+
+    BST students(Student(ID, name, department, GPA));
+
+    for (int i = 1; i < numOfStudents; i++)
     {
-        Student s;
         getline(myFile, line); // Read ID
-        s.ID = stoi(line);
+        ID = stoi(line);
 
         getline(myFile, line); // Read Name
-        s.name = line;
+        name = line;
 
         getline(myFile, line); // Read GPA
-        s.GPA = stod(line);
+        GPA = stod(line);
 
         getline(myFile, line); // Read Department
-        s.department = line;
+        department = line;
 
-        students.push_back(s);
+        students.addStudent(Student(ID, name, department, GPA));
     }
-    // vector<Student> students = {
-    //     {1, "Abdo", "CS", 4.441},
-    //     {2, "Boda", "IS", 4.442},
-    //     {3, "7mada", "IT", 4.443},
-    //     {4, "Body", "IP", 4.444}};
-    BST bst(students);
-    // BST bst(Student(10,"Bozo", "IT", 3.3));
-    // bst.addStudent(Student(11, "Bozo", "IT", 3.3));
-    // bst.addStudent(Student(12, "Bozo", "IT", 3.3));
-    // bst.addStudent(Student(13, "Bozo", "IT", 3.3));
-    // bst.deleteStudent(7);
-    // bst.searchStudent(7);
-    bst.printAll();
-    // bst.printDepartmentReport();
-    // bst.printDepartmentReport();
+
+    // students.addStudent(Student(11, "Bozo", "IT", 3.3));
+    // students.addStudent(Student(12, "Bozo", "IT", 3.3));
+    // students.addStudent(Student(13, "Bozo", "IT", 3.3));
+    students.printAll();
+    students.addStudent(Student(11, "Bozo", "IT", 3.3));
+    students.printAll();
+    students.printDepartmentReport();
+    students.searchStudent(11);
 }
