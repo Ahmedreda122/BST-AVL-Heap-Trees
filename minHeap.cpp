@@ -90,9 +90,10 @@ class minHeap{
         return(size);
     }
     void print(){
-        for (int i = 0; i < size; i++)
+       for (int i = 0; i < size; i++)
         {
-            cout << heap[i].name << " ";
+            cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << 
+            heap[i].GPA << endl;
         }cout << endl;
     }
     ~minHeap(){
@@ -100,3 +101,23 @@ class minHeap{
     }
 
 };
+
+int main(){
+    minHeap h;
+    Student s(20210205,"abdelrhman", "CS", 3.52);
+    Student s1(20210235,"gamal", "IT", 3.24);
+    Student s2(20210215,"adel", "DS", 3.12);
+    Student s3(20210005,"kamal", "CS", 2.05656);
+    Student s4(20210105,"hassan", "AI", 3.7);
+    Student s5(20210305,"samy", "CS", 3.5223);
+    h.push(s);
+    h.push(s1);
+    h.push(s2);
+    h.push(s3);
+    h.push(s4);
+    h.push(s5);
+
+
+
+    h.print();
+}

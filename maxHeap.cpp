@@ -9,7 +9,6 @@ parent for node => (i-1)/2
 left for node   => (2i+1)
 right for node  => (2i+2)
 */
-template<typename type>
 class maxHeap{
     private:
     int size;
@@ -42,7 +41,7 @@ class maxHeap{
         heapifyUp(parentPos);
     }
     // insert in heap
-    void push(type ele){
+    void push(Student student){
         // to recapacity heap to protect memory
          if(capacity == size){
             capacity *= 2;
@@ -51,7 +50,7 @@ class maxHeap{
             delete[] heap;
             heap = newHeap;
         }
-        heap[size++] = ele;
+        heap[size++] = student;
         heapifyUp(size-1);
     }
     void heapifyDown(int parentPos){
@@ -95,7 +94,8 @@ class maxHeap{
     void print(){
         for (int i = 0; i < size; i++)
         {
-            cout << heap[i] << " ";
+            cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << 
+            heap[i].GPA << endl;
         }cout << endl;
     }
     ~maxHeap(){
@@ -103,3 +103,23 @@ class maxHeap{
     }
 
 };
+
+int main(){
+    maxHeap h;
+    Student s(20210205,"abdelrhman", "CS", 3.52);
+    Student s1(20210235,"gamal", "IT", 3.24);
+    Student s2(20210215,"adel", "DS", 3.12);
+    Student s3(20210005,"kamal", "CS", 2.05656);
+    Student s4(20210105,"hassan", "AI", 3.7);
+    Student s5(20210305,"samy", "CS", 3.5223);
+    h.push(s);
+    h.push(s1);
+    h.push(s2);
+    h.push(s3);
+    h.push(s4);
+    h.push(s5);
+
+
+
+    h.print();
+}
