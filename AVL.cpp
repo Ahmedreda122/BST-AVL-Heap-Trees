@@ -1,39 +1,59 @@
 #include <algorithm>
 #include <iostream>
+#include "Student.cpp"
 
 using namespace std;
 
-struct node
+struct StudentNode
 {
-  node* left = nullptr;
-  node* right = nullptr;
-  int value = 0;
-  node(int val) : value(val){}
+  StudentNode* left;
+  StudentNode* right;
+  
+  Student dataOBJ;
+
+  int getID() const
+  {
+    return dataOBJ.ID;
+  }
+
+  StudentNode()
+  {
+    left = nullptr;
+    right = nullptr;
+    dataOBJ = Student(0, "none", "none", 0.0);
+  }
+
+  StudentNode(const Student& data)
+  {
+    left = nullptr;
+    right = nullptr;
+    dataOBJ = data;
+  }
 };
 
 class AVL
 {
 private:
-  node* root;
+  StudentNode* root;
 public: 
 
   AVL(): root(nullptr) {}
 
-  node* insertion(int value, node* current)
+  StudentNode* insertion(Student newStdnt, StudentNode* current)
   {
     if (current == nullptr)
     {
-      node* newNode = new node(value);
+      StudentNode* newNode = new StudentNode(newStdnt);
       current = newNode;
       return current;
     }
-    else if (value > current->value)
+    else if (newStdnt.ID > current->getID())
     { 
-      current->right = insertion(value, current->right);
+      current->right = insertion(newStdnt, current->right);
     }
-    else if (value < current->value)
+    else if (newStdnt.ID < current->getID())
     {
-      current->left = insertion(value, current->left);
+      current->left = insertion(newStdnt, current->left);
     }
     else
     {
@@ -44,39 +64,39 @@ public:
     int BF = getBalanceFactor(current);
     
     // Imbalance comes from Left of Left child
-    if (BF > 1 && current->value < current->left->value)
+    if (BF > 1 && newStdnt.ID < current->left->getID())
     {
       return LL_Rotation(current);
     }
     // Imbalance comes from Right of Right child
-    else if (BF < -1 && current->value > current->right->value)
+    else if (BF < -1 && newStdnt.ID > current->right->getID())
     {
       return RR_Rotation(current);
     } 
     // Imbalance comes from Right of Left Child (Left Right Grand Child)
-    else if (BF > 1 && current->value > current->left->value)
+    else if (BF > 1 && newStdnt.ID > current->left->getID())
     {
       return LR_Rotation(current);
     }
     // Imbalance comes from left Right Child (Right Left Grand Child)
-    else if (BF < -1 && current->value < current->right->value)
+    else if (BF < -1 && newStdnt.ID < current->right->getID())
     {
       return RL_Rotation(current);
     }
     return current;
   }
 
-  int getHeight(node* current)
+  int getHeight(StudentNode* current)
   {
     if (current == nullptr)
-      // Return -1 because the leaf node will have 0 as a height
+      // Return -1 because the leaf StudentNode will have 0 as a height
       return -1;
     else
-      // 1 + the maximum height of the children of that node 
+      // 1 + the maximum height of the children of that StudentNode 
       return 1 + max(getHeight(current->left), getHeight(current->right));
   } 
 
-  int getBalanceFactor(node* current)
+  int getBalanceFactor(StudentNode* current)
   {
     if (current == NULL)
     {
@@ -89,9 +109,9 @@ public:
   }
 
   // + for root, +(0) child 
-  node* LL_Rotation(node* current)// Single Right Rotation
+  StudentNode* LL_Rotation(StudentNode* current)// Single Right Rotation
   {
-    node* child = current->left;
+    StudentNode* child = current->left;
 
     current->left = child->right;
     child->right = current;
@@ -99,8 +119,8 @@ public:
     return child;
   }
 
-  node* RR_Rotation(node* current) { // Single Left Rotation
-    node* child = current->right;
+  StudentNode* RR_Rotation(StudentNode* current) { // Single Left Rotation
+    StudentNode* child = current->right;
     
     current->right = child->left;
     child->left = current;
@@ -108,9 +128,9 @@ public:
     return child;
   }
 
-  node* LR_Rotation(node* current) { // Double Rotition (Left then Right)
-    node* child = current->left;
-    node* GrChild = child->right;
+  StudentNode* LR_Rotation(StudentNode* current) { // Double Rotition (Left then Right)
+    StudentNode* child = current->left;
+    StudentNode* GrChild = child->right;
 
     current->left = GrChild->left;
     child->right = GrChild->right;
@@ -123,9 +143,9 @@ public:
     // LL_Rotation(current);
   }
   
-  node* RL_Rotation(node* current) { // Double Rotition (Right then Left)
-    node* child = current->right;
-    node* GrChild = child->left;
+  StudentNode* RL_Rotation(StudentNode* current) { // Double Rotition (Right then Left)
+    StudentNode* child = current->right;
+    StudentNode* GrChild = child->left;
 
     current->right = GrChild->left;
     child->left = GrChild->right;
@@ -138,45 +158,57 @@ public:
     //RR_Rotation(current);
   }
 
-  void insert(int value)
+  void addStudent(Student newStdnt)
   {
-    root = insertion(value, this->root);
+    root = insertion(newStdnt, this->root);
   }
 
-  void preOrder(node* current)
+  void preOrder(StudentNode* current)
   {
     if (current == nullptr)
     {
       return;
     }
-    
-    cout << current->value << '\t';
+
+    static int counter = 0;
+
+    cout << ++counter << "-"; 
+    this->printStuData(current);
     preOrder(current->left);
     preOrder(current->right);
   }
 
-  void inOrder(node* current)
+  void inOrder(StudentNode* current)
   {
     if (current == nullptr)
     {
       return;
     }
-    
+    static int counter = 0;
+
     inOrder(current->left);
-    cout << current->value << '\t';
+    cout << ++counter << "-";
+    this->printStuData(current);
     inOrder(current->right);
   }
 
-  void postOrder(node* current)
+  void postOrder(StudentNode* current)
   {
     if (current == nullptr)
     {
       return;
     }
-    
+    static int counter = 0;
+
     postOrder(current->left);
     postOrder(current->right);
-    cout << current->value << '\t';
+    cout << ++counter << "-";
+    this->printStuData(current);
+  }
+
+  void printStuData(StudentNode* stdntNode)
+  {
+    cout << "ID: " << stdntNode->dataOBJ.ID << ", Name: " << stdntNode->dataOBJ.name << ", Department: " << stdntNode->dataOBJ.department << ", GPA: " << stdntNode->dataOBJ.GPA << endl;
   }
 
   void print(string traversalType = "preorder")
@@ -204,7 +236,12 @@ public:
     }
   }
 
-  bool search(node* current, int key)
+  void printAll()
+  {
+    inOrder(this->root);
+  }
+
+  bool search(StudentNode* current, int ID)
   {
     while(true)
     {
@@ -213,12 +250,13 @@ public:
         cout << "Item Does not Exist In The Tree" << endl;
         return false;
       }
-      else if (current->value == key)
+      else if (current->getID() == ID)
       {
-        cout << "Item is Found\n";
+        cout << "Student's data is Found\n";
+        this->printStuData(current);
         return true;
       }
-      else if (key > current->value)
+      else if (ID > current->getID())
       {
         current = current->right;
       }
@@ -229,12 +267,12 @@ public:
     }
   }
 
-  bool search(int key)
+  bool search(int ID)
   {
-    return search(root, key);
+    return search(root, ID);
   }
 
-  node* findMin(node* current)
+  StudentNode* findMin(StudentNode* current)
   {
     if (current == nullptr)
     {
@@ -250,12 +288,12 @@ public:
     }
   }
 
-  node* findMin()
+  StudentNode* findMin()
   {
     return findMin(root);
   }
 
-  node* findMax(node* current)
+  StudentNode* findMax(StudentNode* current)
   {
     if (current == nullptr)
     { 
@@ -271,43 +309,43 @@ public:
     }
   }
 
-  node* findMax()
+  StudentNode* findMax()
   {
     return findMax(root);
   }
 
 
-  node* deleteNode(node* current, int key)
+  StudentNode* deleteStudentNode(StudentNode* current, int ID)
   {
     if (current == nullptr)
     {
       return 0;
     }
 
-    if (key > current->value) // Item exists in right subtree
+    if (ID > current->getID()) // Item exists in right subtree
     {
-      // Make the right of the current node be the updated subtree (After deletion)
-      current->right = deleteNode(current->right, key);
+      // Make the right of the current StudentNode be the updated subtree (After deletion)
+      current->right = deleteStudentNode(current->right, ID);
     }
-    else if (key < current->value) // Item exists in left subtree
+    else if (ID < current->getID()) // Item exists in left subtree
     {
-      // Make the left of the current node be the updated subtree (After deletion)
-      current->left = deleteNode(current->left, key);
+      // Make the left of the current StudentNode be the updated subtree (After deletion)
+      current->left = deleteStudentNode(current->left, ID);
     }
-    else // If current node is the node i want to delete
+    else // If current StudentNode is the StudentNode i want to delete
     {
-      // IF current node is a leaf node
+      // IF current StudentNode is a leaf StudentNode
       if (current->right == nullptr && current->left == nullptr)
       {
-        // Delete the current node and return nullptr to the parent node to point at it
+        // Delete the current StudentNode and return nullptr to the parent StudentNode to point at it
         delete current;
         return nullptr;
       }
       // Has one child (right child)
       else if (current->right != nullptr && current->left == nullptr)
       {
-        // Move current node to be the right node (point at right subtree) and Deletes the the previous node (current node before moving it)
-        node* prev = current; 
+        // Move current StudentNode to be the right StudentNode (point at right subtree) and Deletes the the previous StudentNode (current StudentNode before moving it)
+        StudentNode* prev = current; 
         current = current->right;
         delete prev;
         return current;
@@ -315,8 +353,8 @@ public:
       // Has one child (left child)
       else if (current->left != nullptr && current->right == nullptr)
       {
-        // Move current node to be the left node (point at right subtree) then Deletes the previous node (current node before moving it);
-        node* prev = current; 
+        // Move current StudentNode to be the left StudentNode (point at right subtree) then Deletes the previous StudentNode (current StudentNode before moving it);
+        StudentNode* prev = current; 
         current = current->left;
         delete prev;
         return current;
@@ -324,33 +362,33 @@ public:
       // Has Two children
       else 
       {
-        // Successor (minimum node of the right subtree)
-        node* successor = findMin(current->right);
-        // Move the successor data into current node then delete the successor node and return the updated current node to make parent point at it
-        current->value = successor->value;
-        // Make the current node point at the right subtree after deleting the successor node from it
-        current->right = deleteNode(current->right, successor->value);
+        // Successor (minimum StudentNode of the right subtree)
+        StudentNode* successor = findMin(current->right);
+        // Move the successor data into current StudentNode then delete the successor StudentNode and return the updated current StudentNode to make parent point at it
+        current->dataOBJ = successor->dataOBJ;
+        // Make the current StudentNode point at the right subtree after deleting the successor StudentNode from it
+        current->right = deleteStudentNode(current->right, successor->getID());
       }
     }
     // Balance Factor = Height of left subtree - Height of right subtree
     int BF = getBalanceFactor(current);
     
-    // Node From Right Subtree was Deleted and Imbalance came from left of left Subtree.
+    // StudentNode From Right Subtree was Deleted and Imbalance came from left of left Subtree.
     if (BF == 2 && getBalanceFactor(current->left) >= 0) // BF of left subtree can be 0 or 1 only for this case because it's already balanced subtree
     {
       return LL_Rotation(current);
     }
-    // Node From Right Subtree was Deleted and Imbalance came from Right of left Subtree (left right node).
+    // StudentNode From Right Subtree was Deleted and Imbalance came from Right of left Subtree (left right StudentNode).
     else if (BF == 2 && getBalanceFactor(current->left) == -1)
     {
       return LR_Rotation(current);
     }
-    // Node From Left Subtree was Deleted and Imbalance came from Right of Right Subtree.
+    // StudentNode From Left Subtree was Deleted and Imbalance came from Right of Right Subtree.
     else if (BF == -2 && getBalanceFactor(current->right) <= 0) // BF of right subtree can be 0 or -1 only for this case because it's already balanced subtree
     {
       return RR_Rotation(current);
     }
-    // Node From Left Subtree was Deleted and Imbalance came from Left of Right Subtree (Right Left node).
+    // StudentNode From Left Subtree was Deleted and Imbalance came from Left of Right Subtree (Right Left StudentNode).
     else if (BF == -2 && getBalanceFactor(current->right) == 1)
     {
       return RL_Rotation(current);
@@ -358,22 +396,64 @@ public:
     return current;
   }
 
-  void deleteNode(int key)
+  void deleteStudentNode(int ID)
   {
-    root = deleteNode(this->root, key);
+    root = deleteStudentNode(this->root, ID);
   }
 };
 
 int main()
 {
-  AVL tree;
-  tree.insert(5);
-  tree.insert(9);
-  tree.insert(8);
-  tree.insert(7);
-  tree.insert(6);
-  tree.print("preorder");
-  tree.deleteNode(7);
-  cout << endl;
-  tree.print("preorder");
+    AVL students;
+    ifstream myFile;
+
+    myFile.open("Test.txt", ios::in);
+    int ID;
+    string name, department;
+    double GPA;
+    string line = "";
+    int numOfStudents = 0;
+
+    // Read Number of Students
+    getline(myFile, line);
+    numOfStudents = stoi(line);
+
+    // Read first student
+    getline(myFile, line); // Read ID
+    ID = stoi(line);
+
+    getline(myFile, line); // Read Name
+    name = line;
+
+    getline(myFile, line); // Read GPA
+    GPA = stod(line);
+
+    getline(myFile, line); // Read Department
+    department = line;
+
+    students.addStudent(Student(ID, name, department, GPA));
+    for (int i = 1; i < numOfStudents; i++)
+    {
+        getline(myFile, line); // Read ID
+        ID = stoi(line);
+
+        getline(myFile, line); // Read Name
+        name = line;
+
+        getline(myFile, line); // Read GPA
+        GPA = stod(line);
+
+        getline(myFile, line); // Read Department
+        department = line;
+
+        students.addStudent(Student(ID, name, department, GPA));
+    }
+
+    students.addStudent(Student(11, "Bozo", "IT", 3.3));
+    students.addStudent(Student(12, "Bozo", "IT", 3.3));
+    students.addStudent(Student(13, "Bozo", "IT", 3.3));
+    students.printAll();
+students.printAll();
+    // students.printDepartmentReport();
+    // students.searchStudent(11);
 }
