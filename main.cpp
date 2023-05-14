@@ -4,6 +4,11 @@ using namespace std;
 
 void printMenu();
 void enterStudentData(int& ID, string& name, string& department, double& GPA);
+void loadFileIntoTree(ifstream& file, AVL& tree);
+// BST
+//BST& loadFileIntoTree(ifstream& file);
+void loadFileIntoTree(ifstream& file, minHeap& tree);
+void loadFileIntoTree(ifstream& file, maxHeap& tree);
 
 int main()
 {
@@ -20,11 +25,15 @@ int main()
     string department;
     double GPA;
 
+    ifstream file;
+
     cin >> choice;
 
     // BST
     if (choice == 1)
     {
+      // // The Tree Created inside
+      // BST* Tree move(loadFileIntoTree(file));
       while(true)
       {
         printMenu();
@@ -60,6 +69,7 @@ int main()
     else if (choice == 2)
     {
       AVL tree;
+      loadFileIntoTree(file, tree);
       while(true)
       {
         printMenu();
@@ -98,8 +108,11 @@ int main()
         }
       }
     }
+    // MinHeap
     else if (choice == 3)
     {
+      minHeap tree;
+      loadFileIntoTree(file, tree);
       while(true)
       {
         printMenu();
@@ -131,8 +144,11 @@ int main()
         }
       }
     }
+    // MaxHeap
     else if (choice == 4)
     {
+      maxHeap tree;
+      loadFileIntoTree(file, tree);
       while(true)
       {
         printMenu();
@@ -189,4 +205,146 @@ void enterStudentData(int& ID, string& name, string& department, double& GPA)
   cin >> GPA;
 }
 
+void loadFileIntoTree(ifstream& file, AVL& tree)
+{
+    int ID;
+    string name, department;
+    double GPA;
+    string line = "";
+    int numOfStudents = 0;
 
+    file.open("Test.txt", ios::in);
+
+    // Read Number of Students
+    getline(file, line);
+    numOfStudents = stoi(line);
+
+    for (int i = 0; i < numOfStudents; i++)
+    {
+      getline(file, line); // Read ID
+      ID = stoi(line);
+
+      getline(file, line); // Read Name
+      name = line;
+
+      getline(file, line); // Read GPA
+      GPA = stod(line);
+
+      getline(file, line); // Read Department
+      department = line;
+
+      tree.addStudent(Student(ID, name, department, GPA));
+    }
+}
+
+// BST& loadFileIntoTree(ifstream& file)
+// {
+//     int ID;
+//     string name, department;
+//     double GPA;
+//     string line = "";
+//     int numOfStudents = 0;
+
+//     file.open("Test.txt", ios::in);
+
+//     // Read Number of Students
+//     getline(file, line);
+//     numOfStudents = stoi(line);
+
+//     // Read first student
+//     getline(file, line); // Read ID
+//     ID = stoi(line);
+
+//     getline(file, line); // Read Name
+//     name = line;
+
+//     getline(file, line); // Read GPA
+//     GPA = stod(line);
+
+//     getline(file, line); // Read Department
+//     department = line;
+
+//     BST tree(Student(ID, name, department, GPA));
+
+//     for (int i = 1; i < numOfStudents; i++)
+//     {
+//       getline(file, line); // Read ID
+//       ID = stoi(line);
+
+//       getline(file, line); // Read Name
+//       name = line;
+
+//       getline(file, line); // Read GPA
+//       GPA = stod(line);
+
+//       getline(file, line); // Read Department
+//       department = line;
+
+//       tree.addStudent(Student(ID, name, department, GPA));
+//     }
+//   return &tree;
+// }
+
+void loadFileIntoTree(ifstream& file, minHeap& tree)
+{
+    int ID;
+    string name, department;
+    double GPA;
+    string line = "";
+    int numOfStudents = 0;
+
+    file.open("Test.txt", ios::in);
+
+    // Read Number of Students
+    getline(file, line);
+    numOfStudents = stoi(line);
+
+    for (int i = 0; i < numOfStudents; i++)
+    {
+      getline(file, line); // Read ID
+      ID = stoi(line);
+
+      getline(file, line); // Read Name
+      name = line;
+
+      getline(file, line); // Read GPA
+      GPA = stod(line);
+
+      getline(file, line); // Read Department
+      department = line;
+
+      tree.push(Student(ID, name, department, GPA));
+    }
+}
+
+void loadFileIntoTree(ifstream& file, maxHeap& tree)
+{
+    int ID;
+    string name, department;
+    double GPA;
+    string line = "";
+    int numOfStudents = 0;
+
+    file.open("Test.txt", ios::in);
+
+    // Read Number of Students
+    getline(file, line);
+    numOfStudents = stoi(line);
+
+    for (int i = 0; i < numOfStudents; i++)
+    {
+      getline(file, line); // Read ID
+      ID = stoi(line);
+
+      getline(file, line); // Read Name
+      name = line;
+
+      getline(file, line); // Read GPA
+      GPA = stod(line);
+
+      getline(file, line); // Read Department
+      department = line;
+
+      tree.push(Student(ID, name, department, GPA));
+    }
+}
