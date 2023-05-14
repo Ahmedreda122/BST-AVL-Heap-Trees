@@ -35,6 +35,18 @@ class AVL
 {
 private:
   StudentNode* root;
+  map<string, int> departmentCounters;
+
+  void LoadDepartmentCounter(StudentNode* current)
+  {
+    if (current == nullptr)
+    {
+      return;
+    }
+    ++departmentCounters[current->dataOBJ.department];
+    LoadDepartmentCounter(current->left);
+    LoadDepartmentCounter(current->right);
+  }
 public: 
 
   AVL(): root(nullptr) {}
@@ -172,7 +184,7 @@ public:
 
     static int counter = 0;
 
-    cout << ++counter << "-"; 
+    cout << ++counter << "- "; 
     this->printStuData(current);
     preOrder(current->left);
     preOrder(current->right);
@@ -187,8 +199,9 @@ public:
     static int counter = 0;
 
     inOrder(current->left);
-    cout << ++counter << "-";
+    cout << ++counter << "- ";
     this->printStuData(current);
+    cout << setfill('0') << setw(2);
     inOrder(current->right);
   }
 
@@ -202,7 +215,7 @@ public:
 
     postOrder(current->left);
     postOrder(current->right);
-    cout << ++counter << "-";
+    cout << ++counter << "- ";
     this->printStuData(current);
   }
 
@@ -241,6 +254,15 @@ public:
     inOrder(this->root);
   }
 
+  void printDepartmentReport()
+  {
+    LoadDepartmentCounter(this->root);
+    for (const auto &counter : departmentCounters)
+    {
+      cout << counter.first << ": " << counter.second << " Students\n";
+    }
+  }
+
   bool search(StudentNode* current, int ID)
   {
     while(true)
@@ -267,7 +289,7 @@ public:
     }
   }
 
-  bool search(int ID)
+  bool search4Student(int ID)
   {
     return search(root, ID);
   }
@@ -400,6 +422,7 @@ public:
   {
     root = deleteStudentNode(this->root, ID);
   }
+
 };
 
 int main()
@@ -452,8 +475,10 @@ int main()
     students.addStudent(Student(11, "Bozo", "IT", 3.3));
     students.addStudent(Student(12, "Bozo", "IT", 3.3));
     students.addStudent(Student(13, "Bozo", "IT", 3.3));
+    students.deleteStudentNode(13);
+    students.deleteStudentNode(8);
+    students.deleteStudentNode(5);
     students.printAll();
-students.printAll();
-    // students.printDepartmentReport();
-    // students.searchStudent(11);
+    students.printDepartmentReport();
+    //students.search4Student(11);
 }
