@@ -10,6 +10,13 @@ struct Student
   Student(int ID, string name, string department, double GPA) : ID(ID), name(name), department(department), GPA(GPA) {}
   Student():ID(0),GPA(4.4){}
 
+  void addData(int ID, string name, string department, double GPA){
+      this->ID = ID;
+      this->name = name;
+      this->department = department;
+      this->GPA = GPA;
+  }
+
   Student& operator=(const Student& other)
   {
     if (this != &other)

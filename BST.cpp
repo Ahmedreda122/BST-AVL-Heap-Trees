@@ -22,7 +22,6 @@ private:
     void specialDelete(BST *parent, BST *Child);
 
 public:
-    BST() : student(NULL), left(nullptr), right(nullptr) {}
     BST(Student student) : student(student), left(nullptr), right(nullptr) {}
     void addStudent(Student student);
     void searchStudent(int ID);

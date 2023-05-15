@@ -5,8 +5,6 @@ using namespace std;
 void printMenu();
 void enterStudentData(int& ID, string& name, string& department, double& GPA);
 void loadFileIntoTree(ifstream& file, AVL& tree);
-// BST
-//BST& loadFileIntoTree(ifstream& file);
 void loadFileIntoTree(ifstream& file, minHeap& tree);
 void loadFileIntoTree(ifstream& file, maxHeap& tree);
 
@@ -32,8 +30,8 @@ int main()
     // BST
     if (choice == 1)
     {
-      // // The Tree Created inside
-      // BST* Tree move(loadFileIntoTree(file));
+      // Initialize the BST tree with a file
+      BST tree(file);
       while(true)
       {
         printMenu();
@@ -41,22 +39,31 @@ int main()
         // Add Student
         if (Secondchoice == 1)
         {
-
+          enterStudentData(ID, name, department, GPA);
+          tree.addStudent(Student(ID, name, department, GPA));
+          cout << "\nStudent Added Successfully" << endl;
         }
         // Delete Student Node
         else if (Secondchoice == 2)
         {
-
+          cout << "\nEnter Student ID:\n>";
+          cin >> ID;
+          tree.deleteStudent(ID);
         }
         // Search for a Student By ID
         else if (Secondchoice == 3)
         {
-          
+          cout << "\nEnter Student ID to Search for him/her:\n\n> ";
+          cin >> ID;
+          tree.searchStudent(ID);
         }
         // Print All
         else if (Secondchoice == 4)
         {
-
+          cout << "\n---------------------------------------" << endl;
+          tree.printAll();
+          tree.printDepartmentReport();
+          cout << "---------------------------------------\n" << endl;
         }
         // Return to Main Menu
         else if (Secondchoice == 5)
@@ -78,8 +85,8 @@ int main()
         if (Secondchoice == 1)
         {
           enterStudentData(ID, name, department, GPA);
-          tree.addStudent(Student(ID, name, department, GPA));
-          cout << "\nStudent Added Successfully" << endl;
+          if (tree.addStudent(Student(ID, name, department, GPA)))
+            cout << "\nStudent Added Successfully" << endl;
         }
         // Delete Student Node
         else if (Secondchoice == 2)
@@ -91,15 +98,16 @@ int main()
         // Search for a Student By ID
         else if (Secondchoice == 3)
         {
-          cout << "\nEnter Student ID to Search for him/her:\n\n> ";
+          cout << "\nEnter Student ID to Search for him/her:\n> ";
           cin >> ID;
           tree.search4Student(ID);
         }
         // Print All
         else if (Secondchoice == 4)
         {
+          cout << "\n---------------------------------------" << endl;
           tree.printAll();
-          tree.printDepartmentReport();
+          cout << "---------------------------------------\n" << endl;
         }
         // Return to Main Menu
         else if (Secondchoice == 5)
@@ -120,22 +128,31 @@ int main()
         // Add Student
         if (Secondchoice == 1)
         {
-
+          enterStudentData(ID, name, department, GPA);
+          tree.push(Student(ID, name, department, GPA));
+          cout << "\nStudent Added Successfully" << endl;
         }
         // Delete Student Node
         else if (Secondchoice == 2)
         {
-
+          // cout << "\nEnter Student ID:\n>";
+          // cin >> ID;
+          // tree.pop(ID);
         }
         // Search for a Student By ID
         else if (Secondchoice == 3)
         {
-          
+          // cout << "\nEnter Student ID to Search for him/her:\n\n> ";
+          // cin >> ID;
+          // tree.searchStudent(ID);
         }
         // Print All
         else if (Secondchoice == 4)
         {
-
+          cout << "\n---------------------------------------" << endl;
+          tree.print();
+          //tree.printDepartmentReport();
+          cout << "---------------------------------------\n" << endl;
         }
         // Return to Main Menu
         else if (Secondchoice == 5)
@@ -156,22 +173,31 @@ int main()
         // Add Student
         if (Secondchoice == 1)
         {
-
+          enterStudentData(ID, name, department, GPA);
+          tree.push(Student(ID, name, department, GPA));
+          cout << "\nStudent Added Successfully" << endl;
         }
         // Delete Student Node
         else if (Secondchoice == 2)
         {
-
+          // cout << "\nEnter Student ID:\n>";
+          // cin >> ID;
+          // tree.pop(ID);
         }
         // Search for a Student By ID
         else if (Secondchoice == 3)
         {
-          
+          // cout << "\nEnter Student ID to Search for him/her:\n\n> ";
+          // cin >> ID;
+          // tree.searchStudent(ID);
         }
         // Print All
         else if (Secondchoice == 4)
         {
-
+          cout << "\n---------------------------------------" << endl;
+          tree.print();
+          //tree.printDepartmentReport();
+          cout << "---------------------------------------\n" << endl;
         }
         // Return to Main Menu
         else if (Secondchoice == 5)
@@ -195,13 +221,13 @@ void printMenu()
 
 void enterStudentData(int& ID, string& name, string& department, double& GPA)
 {
-  cout << "\nEnter Student's ID: \n\n> ";
+  cout << "\nEnter Student's ID: \n> ";
   cin >> ID;
-  cout << "Enter Student's Name: \n\n> ";
+  cout << "\nEnter Student's Name: \n> ";
   cin >> name;
-  cout << "Enter Student's Department: \n\n> ";
+  cout << "\nEnter Student's Department: \n> ";
   cin >> department;
-  cout << "Enter Student's GPA: \n\n> ";
+  cout << "\nEnter Student's GPA: \n> ";
   cin >> GPA;
 }
 
@@ -236,54 +262,6 @@ void loadFileIntoTree(ifstream& file, AVL& tree)
       tree.addStudent(Student(ID, name, department, GPA));
     }
 }
-
-// BST& loadFileIntoTree(ifstream& file)
-// {
-//     int ID;
-//     string name, department;
-//     double GPA;
-//     string line = "";
-//     int numOfStudents = 0;
-
-//     file.open("Test.txt", ios::in);
-
-//     // Read Number of Students
-//     getline(file, line);
-//     numOfStudents = stoi(line);
-
-//     // Read first student
-//     getline(file, line); // Read ID
-//     ID = stoi(line);
-
-//     getline(file, line); // Read Name
-//     name = line;
-
-//     getline(file, line); // Read GPA
-//     GPA = stod(line);
-
-//     getline(file, line); // Read Department
-//     department = line;
-
-//     BST tree(Student(ID, name, department, GPA));
-
-//     for (int i = 1; i < numOfStudents; i++)
-//     {
-//       getline(file, line); // Read ID
-//       ID = stoi(line);
-
-//       getline(file, line); // Read Name
-//       name = line;
-
-//       getline(file, line); // Read GPA
-//       GPA = stod(line);
-
-//       getline(file, line); // Read Department
-//       department = line;
-
-//       tree.addStudent(Student(ID, name, department, GPA));
-//     }
-//   return &tree;
-// }
 
 void loadFileIntoTree(ifstream& file, minHeap& tree)
 {

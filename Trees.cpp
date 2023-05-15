@@ -31,6 +31,7 @@ struct StudentNode
   }
 };
 
+// ___________________________________<<<<***<AVL Tree>****>>>>_______________________________________________
 class AVL
 {
 private:
@@ -51,7 +52,7 @@ public:
 
   AVL(): root(nullptr) {}
 
-  StudentNode* insertion(Student newStdnt, StudentNode* current)
+  StudentNode* insertion(Student newStdnt, StudentNode* current, bool& isExist)
   {
     if (current == nullptr)
     {
@@ -61,15 +62,16 @@ public:
     }
     else if (newStdnt.ID > current->getID())
     { 
-      current->right = insertion(newStdnt, current->right);
+      current->right = insertion(newStdnt, current->right, isExist);
     }
     else if (newStdnt.ID < current->getID())
     {
-      current->left = insertion(newStdnt, current->left);
+      current->left = insertion(newStdnt, current->left, isExist);
     }
     else
     {
       // NO DUPLICATES ALLOWED
+      isExist = true;
       return current;
     }
     
@@ -98,6 +100,19 @@ public:
     return current;
   }
 
+
+  bool addStudent(Student newStdnt)
+  {
+    bool isExist = false;
+    root = insertion(newStdnt, this->root, isExist);
+    if (isExist)
+    {
+      cout << "This Student ID Added already!" << endl;
+      return false;
+    }
+    return true;
+  }
+  
   int getHeight(StudentNode* current)
   {
     if (current == nullptr)
@@ -170,11 +185,6 @@ public:
     //RR_Rotation(current);
   }
 
-  void addStudent(Student newStdnt)
-  {
-    root = insertion(newStdnt, this->root);
-  }
-
   void preOrder(StudentNode* current)
   {
     if (current == nullptr)
@@ -221,7 +231,7 @@ public:
 
   void printStuData(StudentNode* stdntNode)
   {
-    cout << "ID: " << stdntNode->dataOBJ.ID << ", Name: " << stdntNode->dataOBJ.name << ", Department: " << stdntNode->dataOBJ.department << ", GPA: " << stdntNode->dataOBJ.GPA << endl;
+    cout << "ID: " << stdntNode->dataOBJ.ID << "| Name: " << stdntNode->dataOBJ.name << "| Department: " << stdntNode->dataOBJ.department << "| GPA: " << stdntNode->dataOBJ.GPA << endl;
   }
 
   void print(string traversalType = "preorder")
@@ -425,7 +435,7 @@ public:
   }
 };
 
-
+// ___________________________________<<<<***<BST>****>>>>_______________________________________________
 class BST
 {
 private:
@@ -444,6 +454,54 @@ private:
     void specialDelete(BST *parent, BST *Child);
 
 public:
+    BST(ifstream& file)
+    {
+      left = nullptr;
+      right = nullptr;
+  
+      file.open("Test.txt", ios::in);
+      int ID;
+      string name, department;
+      double GPA;
+      string line = "";
+      int numOfStudents = 0;
+
+      // Read Number of Students
+      getline(file, line);
+      numOfStudents = stoi(line);
+
+      // Read first student
+      getline(file, line); // Read ID
+      ID = stoi(line);
+
+      getline(file, line); // Read Name
+      name = line;
+
+      getline(file, line); // Read GPA
+      GPA = stod(line);
+
+      getline(file, line); // Read Department
+      department = line;
+
+      this->student.addData(ID, name, department, GPA);
+
+      for (int i = 1; i < numOfStudents; i++)
+      {
+          getline(file, line); // Read ID
+          ID = stoi(line);
+
+          getline(file, line); // Read Name
+          name = line;
+
+          getline(file, line); // Read GPA
+          GPA = stod(line);
+
+          getline(file, line); // Read Department
+          department = line;
+
+          this->addStudent(Student(ID, name, department, GPA));
+      }
+    }
     BST(Student student) : student(student), left(nullptr), right(nullptr) {}
     void addStudent(Student student);
     void searchStudent(int ID);
