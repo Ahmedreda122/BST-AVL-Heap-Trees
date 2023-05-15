@@ -669,7 +669,7 @@ void BST::deleteStudent(int ID)
 {
   deleteNode(ID, this);
 }
-
+// max heap
 class maxHeap
 {
 private:
@@ -704,9 +704,9 @@ public:
   void heapifyUp(int childPos)
   {
     int parentPos = parent(childPos);
-    if (childPos == 0 || heap[parentPos].ID > heap[childPos].ID)
+    if (childPos == 0 || heap[parentPos].GPA > heap[childPos].GPA)
       return;
-    swap(heap[childPos].ID, heap[parentPos].ID);
+    swap(heap[childPos], heap[parentPos]);
     heapifyUp(parentPos);
   }
   // insert in heap
@@ -735,13 +735,13 @@ public:
       return;
 
     // to minimize between left and right child
-    if (rightChild != -1 && heap[childPos].ID < heap[rightChild].ID)
+    if (rightChild != -1 && heap[childPos].GPA < heap[rightChild].GPA)
       childPos = rightChild;
 
     // swap between parent and least child
-    if (heap[childPos].ID > heap[parentPos].ID)
+    if (heap[childPos].GPA > heap[parentPos].GPA)
     {
-      swap(heap[parentPos].ID, heap[childPos].ID);
+      swap(heap[parentPos], heap[childPos]);
       heapifyDown(childPos);
     }
   }
@@ -785,6 +785,8 @@ public:
   }
 };
 
+
+// min heap
 class minHeap
 {
 private:
@@ -827,9 +829,9 @@ public:
   void heapifyUp(int childPos)
   {
     int parentPos = parent(childPos);
-    if (childPos == 0 || heap[parentPos].ID < heap[childPos].ID)
+    if (childPos == 0 || heap[parentPos].GPA < heap[childPos].GPA)
       return;
-    swap(heap[childPos].ID, heap[parentPos].ID);
+    swap(heap[childPos], heap[parentPos]);
     heapifyUp(parentPos);
   }
   // insert in heap
@@ -858,13 +860,13 @@ public:
       return;
 
     // to minimize between left and right child
-    if (rightChild != -1 && heap[childPos].ID > heap[rightChild].ID)
+    if (rightChild != -1 && heap[childPos].GPA > heap[rightChild].GPA)
       childPos = rightChild;
 
     // swap between parent and least child
-    if (heap[childPos].ID < heap[parentPos].ID)
+    if (heap[childPos].GPA < heap[parentPos].GPA)
     {
-      swap(heap[parentPos].ID, heap[childPos].ID);
+      swap(heap[parentPos], heap[childPos]);
       heapifyDown(childPos);
     }
   }
