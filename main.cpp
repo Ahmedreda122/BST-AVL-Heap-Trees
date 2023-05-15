@@ -3,6 +3,7 @@
 using namespace std;
 
 void printMenu();
+void printMenuHeap();
 void enterStudentData(int &ID, string &name, string &department, double &GPA);
 void loadFileIntoTree(ifstream &file, AVL &tree);
 void loadFileIntoTree(ifstream &file, minHeap &tree);
@@ -125,7 +126,7 @@ int main()
       loadFileIntoTree(file, tree);
       while (true)
       {
-        printMenu();
+        printMenuHeap();
         cin >> Secondchoice;
         // Add Student
         if (Secondchoice == 1)
@@ -134,22 +135,22 @@ int main()
           tree.push(Student(ID, name, department, GPA));
           cout << "\nStudent Added Successfully" << endl;
         }
-        // Delete Student Node
-        else if (Secondchoice == 2)
-        {
-          cout << "\nEnter Student ID:\n>";
-          cin >> ID;
-          tree.pop(ID);
-        }
-        // Search for a Student By ID
-        else if (Secondchoice == 3)
-        {
-          cout << "\nEnter Student ID to Search for him/her:\n\n> ";
-          cin >> ID;
-          tree.searchStudent(ID);
-        }
+        // // Delete Student Node
+        // else if (Secondchoice == 2)
+        // {
+        //   cout << "\nEnter Student ID:\n>";
+        //   cin >> ID;
+        //   tree.pop(ID);
+        // }
+        // // Search for a Student By ID
+        // else if (Secondchoice == 3)
+        // {
+        //   cout << "\nEnter Student ID to Search for him/her:\n\n> ";
+        //   cin >> ID;
+        //   tree.searchStudent(ID);
+        // }
         // Print All
-        else if (Secondchoice == 4)
+        else if (Secondchoice == 2)
         {
           cout << "\n---------------------------------------" << endl;
           tree.print();
@@ -158,7 +159,7 @@ int main()
                << endl;
         }
         // Return to Main Menu
-        else if (Secondchoice == 5)
+        else if (Secondchoice == 3)
         {
           break;
         }
@@ -171,7 +172,7 @@ int main()
       loadFileIntoTree(file, tree);
       while (true)
       {
-        printMenu();
+        printMenuHeap();
         cin >> Secondchoice;
         // Add Student
         if (Secondchoice == 1)
@@ -180,22 +181,8 @@ int main()
           tree.push(Student(ID, name, department, GPA));
           cout << "\nStudent Added Successfully" << endl;
         }
-        // Delete Student Node
-        else if (Secondchoice == 2)
-        {
-          // cout << "\nEnter Student ID:\n>";
-          // cin >> ID;
-          // tree.pop(ID);
-        }
-        // Search for a Student By ID
-        else if (Secondchoice == 3)
-        {
-          // cout << "\nEnter Student ID to Search for him/her:\n\n> ";
-          // cin >> ID;
-          // tree.searchStudent(ID);
-        }
         // Print All
-        else if (Secondchoice == 4)
+        else if (Secondchoice == 2)
         {
           cout << "\n---------------------------------------" << endl;
           tree.print();
@@ -204,7 +191,7 @@ int main()
                << endl;
         }
         // Return to Main Menu
-        else if (Secondchoice == 5)
+        else if (Secondchoice == 3)
         {
           break;
         }
@@ -221,6 +208,11 @@ void printMenu()
 {
 
   cout << "\nChoose One Option to Perform\n  1- Add student\n  2- Remove student\n  3- Search student\n  4- Print All (sorted by id)\n  5- Return to main menu\n\n> ";
+}
+void printMenuHeap()
+{
+
+  cout << "\nChoose One Option to Perform\n  1- Add student\n  2- Print All (sorted by id)\n  3- Return to main menu\n\n> ";
 }
 
 void enterStudentData(int &ID, string &name, string &department, double &GPA)
