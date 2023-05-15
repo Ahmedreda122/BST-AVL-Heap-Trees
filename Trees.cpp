@@ -1,14 +1,11 @@
 #include "Student.cpp"
 using namespace std;
 
-// For BST
-map<string, int> departmentCount;
-
 struct StudentNode
 {
-  StudentNode* left;
-  StudentNode* right;
-  
+  StudentNode *left;
+  StudentNode *right;
+
   Student dataOBJ;
 
   int getID() const
@@ -23,7 +20,7 @@ struct StudentNode
     dataOBJ = Student(0, "none", "none", 0.0);
   }
 
-  StudentNode(const Student& data)
+  StudentNode(const Student &data)
   {
     left = nullptr;
     right = nullptr;
@@ -35,10 +32,10 @@ struct StudentNode
 class AVL
 {
 private:
-  StudentNode* root;
+  StudentNode *root;
   map<string, int> departmentCounters;
 
-  void LoadDepartmentCounter(StudentNode* current)
+  void LoadDepartmentCounter(StudentNode *current)
   {
     if (current == nullptr)
     {
@@ -48,20 +45,20 @@ private:
     LoadDepartmentCounter(current->left);
     LoadDepartmentCounter(current->right);
   }
-public: 
 
-  AVL(): root(nullptr) {}
+public:
+  AVL() : root(nullptr) {}
 
-  StudentNode* insertion(Student newStdnt, StudentNode* current, bool& isExist)
+  StudentNode *insertion(Student newStdnt, StudentNode *current, bool &isExist)
   {
     if (current == nullptr)
     {
-      StudentNode* newNode = new StudentNode(newStdnt);
+      StudentNode *newNode = new StudentNode(newStdnt);
       current = newNode;
       return current;
     }
     else if (newStdnt.ID > current->getID())
-    { 
+    {
       current->right = insertion(newStdnt, current->right, isExist);
     }
     else if (newStdnt.ID < current->getID())
@@ -74,9 +71,9 @@ public:
       isExist = true;
       return current;
     }
-    
+
     int BF = getBalanceFactor(current);
-    
+
     // Imbalance comes from Left of Left child
     if (BF > 1 && newStdnt.ID < current->left->getID())
     {
@@ -86,7 +83,7 @@ public:
     else if (BF < -1 && newStdnt.ID > current->right->getID())
     {
       return RR_Rotation(current);
-    } 
+    }
     // Imbalance comes from Right of Left Child (Left Right Grand Child)
     else if (BF > 1 && newStdnt.ID > current->left->getID())
     {
@@ -100,7 +97,6 @@ public:
     return current;
   }
 
-
   bool addStudent(Student newStdnt)
   {
     bool isExist = false;
@@ -112,33 +108,33 @@ public:
     }
     return true;
   }
-  
-  int getHeight(StudentNode* current)
+
+  int getHeight(StudentNode *current)
   {
     if (current == nullptr)
       // Return -1 because the leaf StudentNode will have 0 as a height
       return -1;
     else
-      // 1 + the maximum height of the children of that StudentNode 
+      // 1 + the maximum height of the children of that StudentNode
       return 1 + max(getHeight(current->left), getHeight(current->right));
-  } 
+  }
 
-  int getBalanceFactor(StudentNode* current)
+  int getBalanceFactor(StudentNode *current)
   {
     if (current == NULL)
     {
       return -1;
     }
-    else 
+    else
     {
       return (getHeight(current->left) - getHeight(current->right));
-    }  
+    }
   }
 
-  // + for root, +(0) child 
-  StudentNode* LL_Rotation(StudentNode* current)// Single Right Rotation
+  // + for root, +(0) child
+  StudentNode *LL_Rotation(StudentNode *current) // Single Right Rotation
   {
-    StudentNode* child = current->left;
+    StudentNode *child = current->left;
 
     current->left = child->right;
     child->right = current;
@@ -146,33 +142,36 @@ public:
     return child;
   }
 
-  StudentNode* RR_Rotation(StudentNode* current) { // Single Left Rotation
-    StudentNode* child = current->right;
-    
+  StudentNode *RR_Rotation(StudentNode *current)
+  { // Single Left Rotation
+    StudentNode *child = current->right;
+
     current->right = child->left;
     child->left = current;
 
     return child;
   }
 
-  StudentNode* LR_Rotation(StudentNode* current) { // Double Rotition (Left then Right)
-    StudentNode* child = current->left;
-    StudentNode* GrChild = child->right;
+  StudentNode *LR_Rotation(StudentNode *current)
+  { // Double Rotition (Left then Right)
+    StudentNode *child = current->left;
+    StudentNode *GrChild = child->right;
 
     current->left = GrChild->left;
     child->right = GrChild->right;
 
     GrChild->left = child;
-    GrChild->right = current; 
+    GrChild->right = current;
 
     return GrChild;
     // RR_Rotation(child);
     // LL_Rotation(current);
   }
-  
-  StudentNode* RL_Rotation(StudentNode* current) { // Double Rotition (Right then Left)
-    StudentNode* child = current->right;
-    StudentNode* GrChild = child->left;
+
+  StudentNode *RL_Rotation(StudentNode *current)
+  { // Double Rotition (Right then Left)
+    StudentNode *child = current->right;
+    StudentNode *GrChild = child->left;
 
     current->right = GrChild->left;
     child->left = GrChild->right;
@@ -181,11 +180,11 @@ public:
     GrChild->left = current;
 
     return GrChild;
-    //LL_Rotation(child);
-    //RR_Rotation(current);
+    // LL_Rotation(child);
+    // RR_Rotation(current);
   }
 
-  void preOrder(StudentNode* current)
+  void preOrder(StudentNode *current)
   {
     if (current == nullptr)
     {
@@ -194,13 +193,13 @@ public:
 
     static int counter = 0;
 
-    cout << ++counter << "- "; 
+    cout << ++counter << "- ";
     this->printStuData(current);
     preOrder(current->left);
     preOrder(current->right);
   }
 
-  void inOrder(StudentNode* current)
+  void inOrder(StudentNode *current)
   {
     if (current == nullptr)
     {
@@ -215,7 +214,7 @@ public:
     inOrder(current->right);
   }
 
-  void postOrder(StudentNode* current)
+  void postOrder(StudentNode *current)
   {
     if (current == nullptr)
     {
@@ -229,14 +228,14 @@ public:
     this->printStuData(current);
   }
 
-  void printStuData(StudentNode* stdntNode)
+  void printStuData(StudentNode *stdntNode)
   {
     cout << "ID: " << stdntNode->dataOBJ.ID << "| Name: " << stdntNode->dataOBJ.name << "| Department: " << stdntNode->dataOBJ.department << "| GPA: " << stdntNode->dataOBJ.GPA << endl;
   }
 
   void print(string traversalType = "preorder")
   {
-    for(int i = 0; i < traversalType.length(); ++i)
+    for (int i = 0; i < traversalType.length(); ++i)
     {
       traversalType[i] = tolower(traversalType[i]);
     }
@@ -272,11 +271,12 @@ public:
     {
       cout << counter.first << ": " << counter.second << " Students\n";
     }
+    departmentCounters.clear();
   }
 
-  bool search(StudentNode* current, int ID)
+  bool search(StudentNode *current, int ID)
   {
-    while(true)
+    while (true)
     {
       if (current == nullptr)
       {
@@ -305,7 +305,7 @@ public:
     return search(root, ID);
   }
 
-  StudentNode* findMin(StudentNode* current)
+  StudentNode *findMin(StudentNode *current)
   {
     if (current == nullptr)
     {
@@ -321,15 +321,15 @@ public:
     }
   }
 
-  StudentNode* findMin()
+  StudentNode *findMin()
   {
     return findMin(root);
   }
 
-  StudentNode* findMax(StudentNode* current)
+  StudentNode *findMax(StudentNode *current)
   {
     if (current == nullptr)
-    { 
+    {
       return 0;
     }
     else if (current->right == nullptr)
@@ -342,13 +342,12 @@ public:
     }
   }
 
-  StudentNode* findMax()
+  StudentNode *findMax()
   {
     return findMax(root);
   }
 
-
-  StudentNode* deleteStudentNode(StudentNode* current, int ID)
+  StudentNode *deleteStudentNode(StudentNode *current, int ID)
   {
     if (current == nullptr)
     {
@@ -378,7 +377,7 @@ public:
       else if (current->right != nullptr && current->left == nullptr)
       {
         // Move current StudentNode to be the right StudentNode (point at right subtree) and Deletes the the previous StudentNode (current StudentNode before moving it)
-        StudentNode* prev = current; 
+        StudentNode *prev = current;
         current = current->right;
         delete prev;
         return current;
@@ -387,16 +386,16 @@ public:
       else if (current->left != nullptr && current->right == nullptr)
       {
         // Move current StudentNode to be the left StudentNode (point at right subtree) then Deletes the previous StudentNode (current StudentNode before moving it);
-        StudentNode* prev = current; 
+        StudentNode *prev = current;
         current = current->left;
         delete prev;
         return current;
       }
       // Has Two children
-      else 
+      else
       {
         // Successor (minimum StudentNode of the right subtree)
-        StudentNode* successor = findMin(current->right);
+        StudentNode *successor = findMin(current->right);
         // Move the successor data into current StudentNode then delete the successor StudentNode and return the updated current StudentNode to make parent point at it
         current->dataOBJ = successor->dataOBJ;
         // Make the current StudentNode point at the right subtree after deleting the successor StudentNode from it
@@ -405,7 +404,7 @@ public:
     }
     // Balance Factor = Height of left subtree - Height of right subtree
     int BF = getBalanceFactor(current);
-    
+
     // StudentNode From Right Subtree was Deleted and Imbalance came from left of left Subtree.
     if (BF == 2 && getBalanceFactor(current->left) >= 0) // BF of left subtree can be 0 or 1 only for this case because it's already balanced subtree
     {
@@ -439,38 +438,56 @@ public:
 class BST
 {
 private:
-    Student student;
-    BST *left;
-    BST *right;
-    bool searchStudentHelper(int ID);
-    BST *minNode()
-    {
-        BST *current = this;
-        while (current && current->left)
-            current = current->left;
-        return current;
-    }
-    BST *deleteNode(int ID, BST *node);
-    void specialDelete(BST *parent, BST *Child);
+  Student student;
+  BST *left;
+  BST *right;
+  map<string, int> departmentCount;
+  bool searchStudentHelper(int ID);
+  BST *minNode()
+  {
+    BST *current = this;
+    while (current && current->left)
+      current = current->left;
+    return current;
+  }
+  BST *deleteNode(int ID, BST *node);
+  void specialDelete(BST *parent, BST *Child);
+  void updateDepartmentCount(map<string, int> &departmentCount);
 
 public:
-    BST(ifstream& file)
+  BST(ifstream &file)
+  {
+    left = nullptr;
+    right = nullptr;
+
+    file.open("Test.txt", ios::in);
+    int ID;
+    string name, department;
+    double GPA;
+    string line = "";
+    int numOfStudents = 0;
+
+    // Read Number of Students
+    getline(file, line);
+    numOfStudents = stoi(line);
+
+    // Read first student
+    getline(file, line); // Read ID
+    ID = stoi(line);
+
+    getline(file, line); // Read Name
+    name = line;
+
+    getline(file, line); // Read GPA
+    GPA = stod(line);
+
+    getline(file, line); // Read Department
+    department = line;
+
+    this->student.addData(ID, name, department, GPA);
+
+    for (int i = 1; i < numOfStudents; i++)
     {
-      left = nullptr;
-      right = nullptr;
-  
-      file.open("Test.txt", ios::in);
-      int ID;
-      string name, department;
-      double GPA;
-      string line = "";
-      int numOfStudents = 0;
-
-      // Read Number of Students
-      getline(file, line);
-      numOfStudents = stoi(line);
-
-      // Read first student
       getline(file, line); // Read ID
       ID = stoi(line);
 
@@ -483,372 +500,445 @@ public:
       getline(file, line); // Read Department
       department = line;
 
-      this->student.addData(ID, name, department, GPA);
-
-      for (int i = 1; i < numOfStudents; i++)
-      {
-          getline(file, line); // Read ID
-          ID = stoi(line);
-
-          getline(file, line); // Read Name
-          name = line;
-
-          getline(file, line); // Read GPA
-          GPA = stod(line);
-
-          getline(file, line); // Read Department
-          department = line;
-
-          this->addStudent(Student(ID, name, department, GPA));
-      }
+      this->addStudent(Student(ID, name, department, GPA));
     }
-    BST(Student student) : student(student), left(nullptr), right(nullptr) {}
-    void addStudent(Student student);
-    void searchStudent(int ID);
-    void deleteStudent(int ID);
-    void printAll();
-    void printDepartmentReport();
+  }
+  BST(Student student) : student(student), left(nullptr), right(nullptr) {}
+  void addStudent(Student student);
+  void searchStudent(int ID);
+  void deleteStudent(int ID);
+  void printAll();
+  void printDepartmentReport();
 };
+void BST::updateDepartmentCount(map<string, int> &departmentCount)
+{
+  if (left)
+  {
+    left->updateDepartmentCount(departmentCount);
+  }
+
+  departmentCount[this->student.department]++;
+
+  if (right)
+  {
+    right->updateDepartmentCount(departmentCount);
+  }
+}
 
 void BST::printDepartmentReport()
 {
-    departmentCount[this->student.department]++;
-    if (left)
-    {
-        left->printDepartmentReport();
-    }
-    else if (right)
-    {
-        right->printDepartmentReport();
-    }
-    else
-    {
-        cout << "\nDepartment Report:\n";
-        for (const auto &count : departmentCount)
-        {
-            cout << count.first << ": " << count.second << " students\n";
-        }
-    }
+  updateDepartmentCount(departmentCount);
+
+  cout << "\nDepartment Report:\n";
+  for (const auto &count : departmentCount)
+  {
+    cout << count.first << ": " << count.second << " students\n";
+  }
+  departmentCount.clear();
 }
+
 void BST::printAll()
 {
-    if (left)
-    {
-        left->printAll();
-    }
-    cout << "ID: " << student.ID << ", Name: " << student.name << ", Department: " << student.department << ", GPA: " << student.GPA << endl;
-    if (right)
-    {
-        right->printAll();
-    }
+  if (left)
+  {
+    left->printAll();
+  }
+  cout << "ID: " << student.ID << ", Name: " << student.name << ", Department: " << student.department << ", GPA: " << student.GPA << endl;
+  if (right)
+  {
+    right->printAll();
+  }
 }
 void BST::addStudent(Student student)
 {
-    if (student.ID < 0 || student.ID > 100)
+  if (student.ID < 0 || student.ID > 100)
+  {
+    cout << "ID should be between 0 and 100\n";
+    return;
+  }
+  if (student.ID < this->student.ID)
+  {
+    if (!left) // if there is no left student (left == nullptr)
     {
-        cout << "ID should be between 0 and 100\n";
-        return;
+      left = new BST(student);
     }
-    if (student.ID < this->student.ID)
+    else
     {
-        if (!left) // if there is no left student (left == nullptr)
-        {
-            left = new BST(student);
-        }
-        else
-        {
-            left->addStudent(student); // call addStudent method on the left subtree of the current node
-        }
+      left->addStudent(student); // call addStudent method on the left subtree of the current node
     }
-    else if (student.ID > this->student.ID)
+  }
+  else if (student.ID > this->student.ID)
+  {
+    if (!right) // if there is no right student (right == nullptr)
     {
-        if (!right) // if there is no right student (right == nullptr)
-        {
-            right = new BST(student);
-        }
-        else
-        {
-            right->addStudent(student); //  call addStudent method on the right subtree of the current node
-        }
+      right = new BST(student);
     }
+    else
+    {
+      right->addStudent(student); //  call addStudent method on the right subtree of the current node
+    }
+  }
 
-    else // if student.ID == this->student.ID, update the existing node's data
-    {
-        this->student = student;
-    }
+  else // if student.ID == this->student.ID, update the existing node's data
+  {
+    this->student = student;
+  }
 }
 void BST::searchStudent(int ID)
 {
-    if (!searchStudentHelper(ID))
-    {
-        cout << "Student with ID " << ID << " not found.\n";
-    }
+  if (!searchStudentHelper(ID))
+  {
+    cout << "Student with ID " << ID << " not found.\n";
+  }
 }
 bool BST::searchStudentHelper(int ID)
 {
-    if (ID == this->student.ID)
-    {
-        cout << "Student ID: " << this->student.ID << '\n';
-        cout << "Student Name: " << this->student.name << '\n';
-        cout << "Student Department: " << this->student.department << '\n';
-        cout << "Student GPA: " << this->student.GPA << '\n';
-        return true;
-    }
-    if (ID < this->student.ID)
-    {
-        return (left && left->searchStudentHelper(ID));
-    }
-    return (right && right->searchStudentHelper(ID));
+  if (ID == this->student.ID)
+  {
+    cout << "Student ID: " << this->student.ID << '\n';
+    cout << "Student Name: " << this->student.name << '\n';
+    cout << "Student Department: " << this->student.department << '\n';
+    cout << "Student GPA: " << this->student.GPA << '\n';
+    return true;
+  }
+  if (ID < this->student.ID)
+  {
+    return (left && left->searchStudentHelper(ID));
+  }
+  return (right && right->searchStudentHelper(ID));
 }
 void BST::specialDelete(BST *parent, BST *child)
 {
-    // Instead of deleting the node and returning its child
-    // we copy the child's data and remove it, effectively replacing the node with the child
-    // This is to avoid deleting the root node, then loose its subtrees as it's the root
+  // Instead of deleting the node and returning its child
+  // we copy the child's data and remove it, effectively replacing the node with the child
+  // This is to avoid deleting the root node, then loose its subtrees as it's the root
 
-    // copy the child's data into the current node
-    parent->student.ID = child->student.ID;
-    parent->student.name = child->student.name;
-    parent->student.department = child->student.department;
-    parent->student.GPA = child->student.GPA;
-    parent->left = child->left;   // copy the child's left subtree into the current node's left subtree
-    parent->right = child->right; // copy the child's right subtree into the current node's right subtree
-    delete child;
+  // copy the child's data into the current node
+  parent->student.ID = child->student.ID;
+  parent->student.name = child->student.name;
+  parent->student.department = child->student.department;
+  parent->student.GPA = child->student.GPA;
+  parent->left = child->left;   // copy the child's left subtree into the current node's left subtree
+  parent->right = child->right; // copy the child's right subtree into the current node's right subtree
+  delete child;
 }
 
 BST *BST::deleteNode(int ID, BST *node)
 {
-    if (!node) // There is no node
-        return nullptr;
-    if (ID > node->student.ID) // If the ID is in the right subtree
+  if (!node) // There is no node
+    return nullptr;
+  if (ID > node->student.ID) // If the ID is in the right subtree
+  {
+    node->right = deleteNode(ID, node->right);
+  }
+  else if (ID < node->student.ID) // If the ID is in the left subtree
+  {
+    node->left = deleteNode(ID, node->left);
+  }
+  else // if ID is found (node is found) (==)
+  {
+    if (!node->left && !node->right) // Case: 1 if there is no left/right subtree (has no child) (a leaf)
     {
-        node->right = deleteNode(ID, node->right);
+      delete node;
+      node = nullptr;
     }
-    else if (ID < node->student.ID) // If the ID is in the left subtree
+    // Case: 2 if there is only one child
+    else if (!node->left) // If there is no left
     {
-        node->left = deleteNode(ID, node->left);
+      specialDelete(node, node->right);
     }
-    else // if ID is found (node is found) (==)
+    else if (!node->right) // If there is no right
     {
-        if (!node->left && !node->right) // Case: 1 if there is no left/right subtree (has no child) (a leaf)
-        {
-            delete node;
-            node = nullptr;
-        }
-        // Case: 2 if there is only one child
-        else if (!node->left) // If there is no left
-        {
-            specialDelete(node, node->right);
-        }
-        else if (!node->right) // If there is no right
-        {
-            specialDelete(node, node->left);
-        }
-        // Case: 3 if there is 2 child then use successor
-        else
-        {
-            BST *min = node->right->minNode();
-            node->student.ID = min->student.ID;
-            node->student.name = min->student.name;
-            node->student.department = min->student.department;
-            node->student.GPA = min->student.GPA;
-            node->right = deleteNode(node->student.ID, node->right);
-        }
+      specialDelete(node, node->left);
     }
-    return node;
+    // Case: 3 if there is 2 child then use successor
+    else
+    {
+      BST *min = node->right->minNode();
+      node->student.ID = min->student.ID;
+      node->student.name = min->student.name;
+      node->student.department = min->student.department;
+      node->student.GPA = min->student.GPA;
+      node->right = deleteNode(node->student.ID, node->right);
+    }
+  }
+  return node;
 }
 
 void BST::deleteStudent(int ID)
 {
-    deleteNode(ID, this);
+  deleteNode(ID, this);
 }
 
-class maxHeap{
-    private:
-    int size;
-    int capacity = 10;
-    Student *heap;
-    public:
-    maxHeap(){
-        size = 0;
-        heap = new Student[capacity];
-    }
-    // this function to get child in the left of node
-    int left(int node){
-        int in = node*2+1;
-        return(size <= in?-1:in);
-    }
-    // this function to get child in the right of node
-    int right(int node){
-        int in = node*2+2;
-        return(size <= in?-1:in);
-    }
-    // this function to get parent of this node
-    int parent(int node){
-        int in = (node-1)/2;
-        return(size <= in?-1:in);
-    }
-    void heapifyUp(int childPos){
-        int parentPos = parent(childPos);
-        if(childPos == 0||heap[parentPos].ID > heap[childPos].ID)return;
-        swap(heap[childPos].ID,heap[parentPos].ID);
-        heapifyUp(parentPos);
-    }
-    // insert in heap
-    void push(Student student){
-        // to recapacity heap to protect memory
-        if(capacity == size){
-            capacity *= 2;
-            Student *newHeap = new Student[capacity];
-            for (int i = 0; i < size; i++)newHeap[i] = heap[i];
-            delete[] heap;
-            heap = newHeap;
-        }
-        heap[size++] = student;
-        heapifyUp(size-1);
-    }
-    void heapifyDown(int parentPos){
-        int childPos = left(parentPos);
-        int rightChild = right(parentPos);
+class maxHeap
+{
+private:
+  int size;
+  int capacity = 10;
+  Student *heap;
 
-        // no children
-        if(childPos == -1)return;
-        
-        // to minimize between left and right child 
-        if(rightChild != -1 && heap[childPos].ID < heap[rightChild].ID)
-        childPos = rightChild;
-
-        // swap between parent and least child
-        if(heap[childPos].ID > heap[parentPos].ID){
-            swap(heap[parentPos].ID, heap[childPos].ID);
-            heapifyDown(childPos);
-        }
-    }
-    // delete element
-    void pop()
+public:
+  maxHeap()
+  {
+    size = 0;
+    heap = new Student[capacity];
+  }
+  // this function to get child in the left of node
+  int left(int node)
+  {
+    int in = node * 2 + 1;
+    return (size <= in ? -1 : in);
+  }
+  // this function to get child in the right of node
+  int right(int node)
+  {
+    int in = node * 2 + 2;
+    return (size <= in ? -1 : in);
+  }
+  // this function to get parent of this node
+  int parent(int node)
+  {
+    int in = (node - 1) / 2;
+    return (size <= in ? -1 : in);
+  }
+  void heapifyUp(int childPos)
+  {
+    int parentPos = parent(childPos);
+    if (childPos == 0 || heap[parentPos].ID > heap[childPos].ID)
+      return;
+    swap(heap[childPos].ID, heap[parentPos].ID);
+    heapifyUp(parentPos);
+  }
+  // insert in heap
+  void push(Student student)
+  {
+    // to recapacity heap to protect memory
+    if (capacity == size)
     {
-        if(size < (capacity/4)){
-            capacity = capacity/2;
-            Student* newHeap = new Student[capacity];
-            for (int i = 0; i < size; i++)newHeap[i] = heap[i];
-            delete [] heap;
-            heap = newHeap;
-        }
-        if(isEmpty())return;
-        // delete parent then parent -> last child
-        heap[0] = heap[--size]; 
-        heapifyDown(0);
+      capacity *= 2;
+      Student *newHeap = new Student[capacity];
+      for (int i = 0; i < size; i++)
+        newHeap[i] = heap[i];
+      delete[] heap;
+      heap = newHeap;
     }
-    bool isEmpty(){
-        return(size == 0);
-    }
-    int sizeHeap(){
-        return(size);
-    }
-    void print(){
-        for (int i = 0; i < size; i++)
-        {
-            cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << 
-            heap[i].GPA << endl;
-        }cout << endl;
-    }
-    ~maxHeap(){
-        delete[] heap;
-    }
+    heap[size++] = student;
+    heapifyUp(size - 1);
+  }
+  void heapifyDown(int parentPos)
+  {
+    int childPos = left(parentPos);
+    int rightChild = right(parentPos);
 
+    // no children
+    if (childPos == -1)
+      return;
+
+    // to minimize between left and right child
+    if (rightChild != -1 && heap[childPos].ID < heap[rightChild].ID)
+      childPos = rightChild;
+
+    // swap between parent and least child
+    if (heap[childPos].ID > heap[parentPos].ID)
+    {
+      swap(heap[parentPos].ID, heap[childPos].ID);
+      heapifyDown(childPos);
+    }
+  }
+  // delete element
+  void pop()
+  {
+    if (size < (capacity / 4))
+    {
+      capacity = capacity / 2;
+      Student *newHeap = new Student[capacity];
+      for (int i = 0; i < size; i++)
+        newHeap[i] = heap[i];
+      delete[] heap;
+      heap = newHeap;
+    }
+    if (isEmpty())
+      return;
+    // delete parent then parent -> last child
+    heap[0] = heap[--size];
+    heapifyDown(0);
+  }
+  bool isEmpty()
+  {
+    return (size == 0);
+  }
+  int sizeHeap()
+  {
+    return (size);
+  }
+  void print()
+  {
+    for (int i = 0; i < size; i++)
+    {
+      cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << heap[i].GPA << endl;
+    }
+    cout << endl;
+  }
+  ~maxHeap()
+  {
+    delete[] heap;
+  }
 };
 
+class minHeap
+{
+private:
+  int size;
+  int capacity = 10;
+  Student *heap;
+  map<string, int> departmentCounters;
 
-class minHeap{
-    private:
-    int size;
-    int capacity = 10;
-    Student *heap;
-    public:
-    minHeap(){
-        size = 0;
-        heap = new Student[capacity];
-    }
-    // this function to get child in the left of node
-    int left(int node){
-        int in = node*2+1;
-        return(size <= in?-1:in);
-    }
-    // this function to get child in the right of node
-    int right(int node){
-        int in = node*2+2;
-        return(size <= in?-1:in);
-    }
-    // this function to get parent of this node
-    int parent(int node){
-        int in = (node-1)/2;
-        return(size <= in?-1:in);
-    }
-    void heapifyUp(int childPos){
-        int parentPos = parent(childPos);
-        if(childPos == 0||heap[parentPos].ID < heap[childPos].ID)return;
-        swap(heap[childPos].ID,heap[parentPos].ID);
-        heapifyUp(parentPos);
-    }
-    // insert in heap
-    void push(Student student){
-        // to recapacity heap to protect memory
-        if(capacity == size){
-            capacity *= 2;
-            Student *newHeap = new Student[capacity];
-            for (int i = 0; i < size; i++)newHeap[i] = heap[i];
-            delete[] heap;
-            heap = newHeap;
-        }
-        heap[size++] = student;
-        heapifyUp(size-1);
-    }
-    void heapifyDown(int parentPos){
-        int childPos = left(parentPos);
-        int rightChild = right(parentPos);
-
-        // no children
-        if(childPos == -1)return;
-        
-        // to minimize between left and right child 
-        if(rightChild != -1 && heap[childPos].ID > heap[rightChild].ID)
-        childPos = rightChild;
-
-        // swap between parent and least child
-        if(heap[childPos].ID < heap[parentPos].ID){
-            swap(heap[parentPos].ID, heap[childPos].ID);
-            heapifyDown(childPos);
-        }
-    }
-    // delete element
-    void pop()
+public:
+  void LoadDepartmentCounter(minHeap *current)
+  {
+    for (int i = 0; i < current->size; i++)
     {
-        if(size < (capacity/4)){
-            capacity = capacity/2;
-            Student* newHeap = new Student[capacity];
-            for (int i = 0; i < size; i++)newHeap[i] = heap[i];
-            delete [] heap;
-            heap = newHeap;
-        }
-        if(isEmpty())return;
-        // delete parent then parent -> last child
-        heap[0] = heap[--size]; 
-        heapifyDown(0);
+      ++departmentCounters[current->heap[i].department];
     }
-    bool isEmpty(){
-        return(size == 0);
-    }
-    int sizeHeap(){
-        return(size);
-    }
-    void print(){
+  }
+  minHeap()
+  {
+    size = 0;
+    heap = new Student[capacity];
+  }
+  // this function to get child in the left of node
+  int left(int node)
+  {
+    int in = node * 2 + 1;
+    return (size <= in ? -1 : in);
+  }
+  // this function to get child in the right of node
+  int right(int node)
+  {
+    int in = node * 2 + 2;
+    return (size <= in ? -1 : in);
+  }
+  // this function to get parent of this node
+  int parent(int node)
+  {
+    int in = (node - 1) / 2;
+    return (size <= in ? -1 : in);
+  }
+  void heapifyUp(int childPos)
+  {
+    int parentPos = parent(childPos);
+    if (childPos == 0 || heap[parentPos].ID < heap[childPos].ID)
+      return;
+    swap(heap[childPos].ID, heap[parentPos].ID);
+    heapifyUp(parentPos);
+  }
+  // insert in heap
+  void push(Student student)
+  {
+    // to recapacity heap to protect memory
+    if (capacity == size)
+    {
+      capacity *= 2;
+      Student *newHeap = new Student[capacity];
       for (int i = 0; i < size; i++)
-        {
-            cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << 
-            heap[i].GPA << endl;
-        }cout << endl;
+        newHeap[i] = heap[i];
+      delete[] heap;
+      heap = newHeap;
     }
-    ~minHeap(){
-        delete[] heap;
+    heap[size++] = student;
+    heapifyUp(size - 1);
+  }
+  void heapifyDown(int parentPos)
+  {
+    int childPos = left(parentPos);
+    int rightChild = right(parentPos);
+
+    // no children
+    if (childPos == -1)
+      return;
+
+    // to minimize between left and right child
+    if (rightChild != -1 && heap[childPos].ID > heap[rightChild].ID)
+      childPos = rightChild;
+
+    // swap between parent and least child
+    if (heap[childPos].ID < heap[parentPos].ID)
+    {
+      swap(heap[parentPos].ID, heap[childPos].ID);
+      heapifyDown(childPos);
     }
+  }
+  // delete element
+  void pop(int ID)
+  {
+    if (size < (capacity / 4))
+    {
+      capacity = capacity / 2;
+      Student *newHeap = new Student[capacity];
+      for (int i = 0; i < size; i++)
+        newHeap[i] = heap[i];
+      delete[] heap;
+      heap = newHeap;
+    }
+    if (isEmpty())
+      return;
+    // delete parent then parent -> last child
+    int index = -1;
+    for (int i = 0; i < size; i++)
+    {
+      if (heap[i].ID == ID)
+      {
+        index = i;
+        break;
+      }
+    }
+    if (index != -1)
+    {
+      heap[index] = heap[--size];
+      heapifyDown(index);
+    }
+  }
+  bool isEmpty()
+  {
+    return (size == 0);
+  }
+  int sizeHeap()
+  {
+    return (size);
+  }
+  void print()
+  {
+    LoadDepartmentCounter(this);
+    for (int i = 0; i < size; i++)
+    {
+      cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << heap[i].GPA << endl;
+    }
+    cout << endl;
+    for (const auto &counter : departmentCounters)
+    {
+      cout << counter.first << ": " << counter.second << " Students\n";
+    }
+    departmentCounters.clear();
+  }
+  void searchStudent(int ID)
+  {
+    for (int i = 0; i < size; i++)
+    {
+      if (heap[i].ID == ID)
+      {
+        cout << "Student ID: " << this->heap[i].ID << '\n';
+        cout << "Student Name: " << this->heap[i].name << '\n';
+        cout << "Student Department: " << this->heap[i].department << '\n';
+        cout << "Student GPA: " << this->heap[i].GPA << '\n';
+        return; // Found the Student with the matching ID
+      }
+    }
+    // ID not found in the min heap
+    cout << "The Student ID is not in the min heap\n";
+  }
+
+  ~minHeap()
+  {
+    delete[] heap;
+  }
 };
