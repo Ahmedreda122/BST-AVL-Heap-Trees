@@ -153,6 +153,7 @@ int main()
         else if (Secondchoice == 2)
         {
           cout << "\n---------------------------------------" << endl;
+          // cout <<
           tree.print();
           // tree.printDepartmentReport();
           cout << "---------------------------------------\n"
@@ -212,15 +213,16 @@ void printMenu()
 void printMenuHeap()
 {
 
-  cout << "\nChoose One Option to Perform\n  1- Add student\n  2- Print All (sorted by id)\n  3- Return to main menu\n\n> ";
+  cout << "\nChoose One Option to Perform\n  1- Add student\n  2- Print All (sorted by GPA)\n  3- Return to main menu\n\n> ";
 }
 
 void enterStudentData(int &ID, string &name, string &department, double &GPA)
 {
   cout << "\nEnter Student's ID: \n> ";
   cin >> ID;
+  cin.ignore();
   cout << "\nEnter Student's Name: \n> ";
-  cin >> name;
+  getline(cin,name);
   cout << "\nEnter Student's Department: \n> ";
   cin >> department;
   cout << "\nEnter Student's GPA: \n> ";

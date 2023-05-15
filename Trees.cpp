@@ -676,8 +676,17 @@ private:
   int size;
   int capacity = 10;
   Student *heap;
+   map<string, int> departmentCounters;
+  // Student *
 
 public:
+ void LoadDepartmentCounter(maxHeap *current)
+  {
+    for (int i = 0; i < current->size; i++)
+    {
+      ++departmentCounters[current->heap[i].department];
+    }
+  }
   maxHeap()
   {
     size = 0;
@@ -745,23 +754,23 @@ public:
       heapifyDown(childPos);
     }
   }
+  // Student first(){
+  //   return heap[0];
+  // }
   // delete element
   void pop()
   {
-    if (size < (capacity / 4))
-    {
-      capacity = capacity / 2;
-      Student *newHeap = new Student[capacity];
-      for (int i = 0; i < size; i++)
-        newHeap[i] = heap[i];
-      delete[] heap;
-      heap = newHeap;
-    }
-    if (isEmpty())
-      return;
-    // delete parent then parent -> last child
-    heap[0] = heap[--size];
-    heapifyDown(0);
+      if(size < (capacity/4)){
+          capacity = capacity/2;
+          Student* newHeap = new Student[capacity];
+          for (int i = 0; i < size; i++)newHeap[i] = heap[i];
+          delete [] heap;
+          heap = newHeap;
+      }
+      if(isEmpty())return;
+      // delete parent then parent -> last child
+      heap[0] = heap[--size]; 
+      heapifyDown(0);
   }
   bool isEmpty()
   {
@@ -773,11 +782,24 @@ public:
   }
   void print()
   {
+    LoadDepartmentCounter(this);
+    maxHeap h;
     for (int i = 0; i < size; i++)
     {
-      cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << heap[i].GPA << endl;
+      Student s(heap[i].ID,heap[i].name, heap[i].department, heap[i].GPA);
+      h.push(s);
+    }
+    while (!h.isEmpty())
+    {
+      cout << h.heap[0].ID << " " << h.heap[0].name << " " << h.heap[0].department << " " << h.heap[0].GPA << endl;
+      h.pop();
     }
     cout << endl;
+     for (const auto &counter : departmentCounters)
+    {
+      cout << counter.first << ": " << counter.second << " Students\n";
+    }
+    departmentCounters.clear();
   }
   ~maxHeap()
   {
@@ -871,34 +893,19 @@ public:
     }
   }
   // delete element
-  void pop(int ID)
+  void pop()
   {
-    if (size < (capacity / 4))
-    {
-      capacity = capacity / 2;
-      Student *newHeap = new Student[capacity];
-      for (int i = 0; i < size; i++)
-        newHeap[i] = heap[i];
-      delete[] heap;
-      heap = newHeap;
-    }
-    if (isEmpty())
-      return;
-    // delete parent then parent -> last child
-    int index = -1;
-    for (int i = 0; i < size; i++)
-    {
-      if (heap[i].ID == ID)
-      {
-        index = i;
-        break;
+      if(size < (capacity/4)){
+          capacity = capacity/2;
+          Student* newHeap = new Student[capacity];
+          for (int i = 0; i < size; i++)newHeap[i] = heap[i];
+          delete [] heap;
+          heap = newHeap;
       }
-    }
-    if (index != -1)
-    {
-      heap[index] = heap[--size];
-      heapifyDown(index);
-    }
+      if(isEmpty())return;
+      // delete parent then parent -> last child
+      heap[0] = heap[--size]; 
+      heapifyDown(0);
   }
   bool isEmpty()
   {
@@ -911,14 +918,21 @@ public:
   void print()
   {
     LoadDepartmentCounter(this);
+     minHeap h;
     for (int i = 0; i < size; i++)
     {
-      cout << heap[i].ID << " " << heap[i].name << " " << heap[i].department << " " << heap[i].GPA << endl;
+      Student s(heap[i].ID,heap[i].name, heap[i].department, heap[i].GPA);
+      h.push(s);
+    }
+    while (!h.isEmpty())
+    {
+      cout << h.heap[0].ID << " " << h.heap[0].name << " " << h.heap[0].department << " " << h.heap[0].GPA << endl;
+      h.pop();
     }
     cout << endl;
     for (const auto &counter : departmentCounters)
     {
-      cout << counter.first << ": " << counter.second << " Students\n";
+      cout << counter.first << " : " << counter.second << " Students\n";
     }
     departmentCounters.clear();
   }
