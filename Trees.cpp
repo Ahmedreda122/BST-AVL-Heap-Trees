@@ -157,8 +157,8 @@ public:
     StudentNode *child = current->left;
     StudentNode *GrChild = child->right;
 
-    current->left = GrChild->left;
-    child->right = GrChild->right;
+    current->left = GrChild->right;
+    child->right = GrChild->left;
 
     GrChild->left = child;
     GrChild->right = current;
@@ -434,7 +434,7 @@ public:
   }
 };
 
-// ___________________________________<<<<***<BST>****>>>>_______________________________________________
+// ___________________________________<<<<****<BST>****>>>>_______________________________________________
 class BST
 {
 private:

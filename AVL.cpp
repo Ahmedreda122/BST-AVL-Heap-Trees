@@ -140,12 +140,13 @@ public:
     return child;
   }
 
-  StudentNode* LR_Rotation(StudentNode* current) { // Double Rotition (Left then Right)
-    StudentNode* child = current->left;
-    StudentNode* GrChild = child->right;
+  StudentNode *LR_Rotation(StudentNode *current) // Double Rotition (Left then Right)
+  { 
+    StudentNode *child = current->left;
+    StudentNode *GrChild = child->right;
 
-    current->left = GrChild->left;
-    child->right = GrChild->right;
+    current->left = GrChild->right; 
+    child->right = GrChild->left;
 
     GrChild->left = child;
     GrChild->right = current; 
@@ -154,10 +155,11 @@ public:
     // RR_Rotation(child);
     // LL_Rotation(current);
   }
-  
-  StudentNode* RL_Rotation(StudentNode* current) { // Double Rotition (Right then Left)
-    StudentNode* child = current->right;
-    StudentNode* GrChild = child->left;
+
+  StudentNode *RL_Rotation(StudentNode *current) // Double Rotition (Right then Left)
+  { 
+    StudentNode *child = current->right;
+    StudentNode *GrChild = child->left;
 
     current->right = GrChild->left;
     child->left = GrChild->right;
@@ -166,8 +168,8 @@ public:
     GrChild->left = current;
 
     return GrChild;
-    //LL_Rotation(child);
-    //RR_Rotation(current);
+    // LL_Rotation(child);
+    // RR_Rotation(current);
   }
 
   void addStudent(Student newStdnt)

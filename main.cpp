@@ -64,8 +64,7 @@ int main()
           cout << "\n---------------------------------------" << endl;
           tree.printAll();
           tree.printDepartmentReport();
-          cout << "---------------------------------------\n"
-               << endl;
+          cout << "---------------------------------------\n" << endl;
         }
         // Return to Main Menu
         else if (Secondchoice == 5)
@@ -109,8 +108,7 @@ int main()
         {
           cout << "\n---------------------------------------" << endl;
           tree.printAll();
-          cout << "---------------------------------------\n"
-               << endl;
+          cout << "---------------------------------------\n" << endl;
         }
         // Return to Main Menu
         else if (Secondchoice == 5)
@@ -155,8 +153,7 @@ int main()
           cout << "\n---------------------------------------" << endl;
           tree.print();
           // tree.printDepartmentReport();
-          cout << "---------------------------------------\n"
-               << endl;
+          cout << "---------------------------------------\n" << endl;
         }
         // Return to Main Menu
         else if (Secondchoice == 3)
@@ -212,7 +209,7 @@ void printMenu()
 void printMenuHeap()
 {
 
-  cout << "\nChoose One Option to Perform\n  1- Add student\n  2- Print All (sorted by id)\n  3- Return to main menu\n\n> ";
+  cout << "\nChoose One Option to Perform\n  1- Add student\n  2- Print All\n  3- Return to main menu\n\n> ";
 }
 
 void enterStudentData(int &ID, string &name, string &department, double &GPA)
